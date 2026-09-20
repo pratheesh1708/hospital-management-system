@@ -1,0 +1,66 @@
+:root {
+  /* Brand Colors */
+  --color-primary-900: #0B132B;
+  --color-primary-800: #1C2541;
+  --color-primary-700: #253358;
+  --color-primary-600: #3A506B;
+
+  /* Clinical Teal Accents */
+  --color-accent-teal: #00A896;
+  --color-accent-teal-dark: #028090;
+  --color-accent-cyan: #02C39A;
+  --color-accent-light: #E6F8F6;
+  --color-accent-glow: rgba(0, 168, 150, 0.2);
+
+  /* Backgrounds & Surfaces */
+  --bg-page: #F8FAFC;
+  --bg-card: #FFFFFF;
+  --bg-subtle: #F1F5F9;
+  --bg-sidebar: #0B132B;
+
+  /* Typography Colors */
+  --text-main: #0F172A;
+  --text-muted: #475569;
+  --text-light: #94A3B8;
+  --text-inverse: #FFFFFF;
+
+  /* Status Colors */
+  --status-success: #10B981;
+  --status-success-bg: #ECFDF5;
+  --status-success-border: #A7F3D0;
+
+  --status-warning: #F59E0B;
+  --status-warning-bg: #FEF3C7;
+  --status-warning-border: #FDE68A;
+
+  --status-danger: #EF4444;
+  --status-danger-bg: #FEF2F2;
+  --status-danger-border: #FECACA;
+
+  --status-info: #3B82F6;
+  --status-info-bg: #EFF6FF;
+  --status-info-border: #BFDBFE;
+
+  /* Borders & Dividers */
+  --border-subtle: #E2E8F0;
+  --border-focus: #00A896;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-glow: 0 0 20px rgba(0, 168, 150, 0.35);
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
