@@ -2,11 +2,20 @@ const oauthService = require('../services/oauthService');
 const authService = require('../services/authService');
 const config = require('../config/environment');
 
+function getCallbackUrl(req) {
+  if (process.env.GOOGLE_CALLBACK_URL) {
+    return process.env.GOOGLE_CALLBACK_URL;
+  }
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
+  const host = req.headers['x-forwarded-host'] || req.headers.host || 'localhost:5000';
+  return `${protocol}://${host}/api/auth/oauth/google/callback`;
+}
+
 const oauthController = {
   // Initiates Google OAuth flow
   async initiateGoogle(req, res, next) {
     try {
-      const callbackUrl = config.google.callbackUrl || `${config.frontendUrl}/api/auth/oauth/google/callback`;
+      const callbackUrl = getCallbackUrl(req);
       const isConfigured = config.google.clientId && !config.google.clientId.startsWith('mock-');
 
       let authUrl;
@@ -70,6 +79,7 @@ const oauthController = {
       // Case 2: OAuth 2.0 Authorization Code exchange
       const code = req.query.code || req.body.code;
       const isRealCode = code && !code.startsWith('demo_google_code') && !code.startsWith('mock_');
+      const callbackUrl = getCallbackUrl(req);
 
       if (!sub && isRealCode && config.google.clientSecret && !config.google.clientSecret.startsWith('mock-')) {
         try {
@@ -81,7 +91,7 @@ const oauthController = {
               code,
               client_id: config.google.clientId,
               client_secret: config.google.clientSecret,
-              redirect_uri: config.google.callbackUrl,
+              redirect_uri: callbackUrl,
               grant_type: 'authorization_code'
             })
           });
@@ -130,7 +140,7 @@ const oauthController = {
           : result.user.role === 'admin'
             ? '/admin/dashboard'
             : '/patient/dashboard';
-        return res.redirect(`${config.frontendUrl}${dest}?oauth=success`);
+        return res.redirect(`${dest}?oauth=success`);
       }
 
       // Otherwise return JSON

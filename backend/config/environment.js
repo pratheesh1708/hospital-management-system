@@ -19,7 +19,7 @@ const config = {
     secret: process.env.JWT_SECRET || 'super_secure_hospital_jwt_secret_production_ready_key_2026!',
     expiresIn: process.env.JWT_EXPIRES_IN || '7d',
     cookieSecure: process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production',
-    cookieSameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+    cookieSameSite: process.env.COOKIE_SAME_SITE || 'lax'
   },
   
   google: {
