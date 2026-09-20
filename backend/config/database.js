@@ -8,7 +8,28 @@ let activeEngine = 'none';
 
 // SQLite fallback adapter mimicking mysql2/promise API
 function createSqliteAdapter() {
-  const sqlite3 = require('sqlite3').verbose();
+  let sqlite3Lib;
+  try {
+    sqlite3Lib = require('sqlite3');
+  } catch (err) {
+    console.error('Failed to load sqlite3 library:', err.message);
+    throw new Error(`SQLite driver load failure: ${err.message}. Please configure MySQL connection variables for persistent storage.`);
+  }
+
+  let sqlite3 = sqlite3Lib;
+  if (sqlite3 && sqlite3.default && typeof sqlite3.default.verbose === 'function') {
+    sqlite3 = sqlite3.default.verbose();
+  } else if (sqlite3 && typeof sqlite3.verbose === 'function') {
+    sqlite3 = sqlite3.verbose();
+  } else if (sqlite3 && sqlite3.default) {
+    sqlite3 = sqlite3.default;
+  }
+
+  const Database = sqlite3.Database || (sqlite3Lib && sqlite3Lib.Database) || (sqlite3Lib?.default && sqlite3Lib.default.Database) || sqlite3;
+  if (typeof Database !== 'function') {
+    throw new Error('SQLite Database constructor could not be resolved from sqlite3 module.');
+  }
+
   const isVercel = Boolean(process.env.VERCEL);
   const dbDir = isVercel ? '/tmp' : path.join(__dirname, '..', 'database');
   const dbPath = path.join(dbDir, 'hospital_local.sqlite');
@@ -25,7 +46,7 @@ function createSqliteAdapter() {
     }
   }
 
-  const db = new sqlite3.Database(dbPath);
+  const db = new Database(dbPath);
 
   // Enable foreign keys
   db.run('PRAGMA foreign_keys = ON');
