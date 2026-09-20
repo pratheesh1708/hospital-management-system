@@ -8,7 +8,7 @@ function errorHandler(err, req, res, next) {
   let clientMessage = err.message || 'An unexpected error occurred. Please try again later.';
 
   if (statusCode === 500 && process.env.NODE_ENV === 'production') {
-    clientMessage = 'An unexpected server error occurred. Our technical staff has been notified.';
+    clientMessage = err.message || 'An unexpected server error occurred. Our technical staff has been notified.';
   }
 
   // Handle common database error patterns
@@ -18,7 +18,8 @@ function errorHandler(err, req, res, next) {
 
   res.status(statusCode).json({
     success: false,
-    message: clientMessage
+    message: clientMessage,
+    error: err.message
   });
 }
 

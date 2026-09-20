@@ -172,6 +172,19 @@ async function initDatabase() {
   pool = createSqliteAdapter();
   activeEngine = 'sqlite';
   console.log('✅ Local Database Adapter initialized.');
+
+  // Automatically ensure tables exist if newly created in /tmp or offline
+  try {
+    const [tables] = await pool.query("SELECT name FROM sqlite_master WHERE type='table' AND name='users'");
+    if (!tables || tables.length === 0) {
+      console.log('📦 Database tables not found. Auto-running schema setup and seed...');
+      const runSetup = require('../database/setup');
+      await runSetup();
+    }
+  } catch (setupErr) {
+    console.warn('Auto-setup check error:', setupErr.message);
+  }
+
   return pool;
 }
 
