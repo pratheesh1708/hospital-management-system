@@ -61,6 +61,20 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Lazy Database initialization for serverless / Vercel runtime
+let isDbReady = false;
+app.use(async (req, res, next) => {
+  if (!isDbReady) {
+    try {
+      await db.initDatabase();
+      isDbReady = true;
+    } catch (err) {
+      console.warn('DB initialization warning:', err.message);
+    }
+  }
+  next();
+});
+
 // REST API Routers
 app.use('/api/auth/oauth', oauthRoutes);
 app.use('/api/auth', authRoutes);
